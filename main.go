@@ -32,10 +32,10 @@ func mainE() error {
 
 	go func(channel syslog.LogPartsChannel) {
 		for logParts := range channel {
-			client := logParts["client"].(string)
-			timestamp := logParts["timestamp"].(string)
-			content := logParts["content"].(string)
-			tag := logParts["tag"].(string)
+			client := fmt.Sprint(logParts["client"])
+			timestamp := fmt.Sprint(logParts["timestamp"])
+			content := fmt.Sprint(logParts["content"])
+			tag := fmt.Sprint(logParts["tag"])
 
 			vars := map[string]string{
 				"UNIT":              "syslog-relay",
