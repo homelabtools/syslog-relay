@@ -21,8 +21,14 @@ func mainE() error {
 	server := syslog.NewServer()
 	server.SetFormat(syslog.Automatic)
 	server.SetHandler(handler)
-	server.ListenUDP("0.0.0.0:514")
-	server.Boot()
+	err := server.ListenUDP("0.0.0.0:514")
+	if err != nil {
+		return err
+	}
+	err = server.Boot()
+	if err != nil {
+		return err
+	}
 
 	go func(channel syslog.LogPartsChannel) {
 		for logParts := range channel {
