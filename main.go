@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	"github.com/coreos/go-systemd/v22/journal"
 	"gopkg.in/mcuadros/go-syslog.v2"
 )
 
@@ -25,7 +26,15 @@ func mainE() error {
 
 	go func(channel syslog.LogPartsChannel) {
 		for logParts := range channel {
-			fmt.Printf("%s %s %s\n", logParts["client"], logParts["timestamp"], logParts["content"])
+			client := logParts["client"]
+			timestamp := logParts["timestamp"]
+			content := logParts["content"]
+
+			fmt.Printf("%s %s %s\n", client, timestamp, content)
+			err := journal.Print(journal.PriInfo, fmt.Sprintf("%s %s %s", client, timestamp, content))
+			if err != nil {
+				fmt.Println(err)
+			}
 		}
 	}(channel)
 
