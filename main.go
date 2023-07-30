@@ -38,9 +38,9 @@ func mainE() error {
 			tag := logParts["tag"]
 
 			vars := map[string]string{
-				"UNIT": "syslog-relay",
+				"UNIT":              "syslog-relay",
 				"SYSLOG_IDENTIFIER": tag,
-				"SYSLOG_TIMESTAMP": timestamp
+				"SYSLOG_TIMESTAMP":  timestamp,
 			}
 
 			fmt.Printf(logParts)
