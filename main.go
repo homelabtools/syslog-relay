@@ -32,10 +32,10 @@ func mainE() error {
 
 	go func(channel syslog.LogPartsChannel) {
 		for logParts := range channel {
-			client := logParts["client"]
-			timestamp := logParts["timestamp"]
-			content := logParts["content"]
-			tag := logParts["tag"]
+			client := logParts["client"].(string)
+			timestamp := logParts["timestamp"].(string)
+			content := logParts["content"].(string)
+			tag := logParts["tag"].(string)
 
 			vars := map[string]string{
 				"UNIT":              "syslog-relay",
@@ -43,7 +43,7 @@ func mainE() error {
 				"SYSLOG_TIMESTAMP":  timestamp,
 			}
 
-			fmt.Printf(logParts)
+			fmt.Println(logParts)
 			// TODO: extract priority
 			err := journal.Print(journal.PriInfo, fmt.Sprintf("%s %s %s", client, timestamp, content), vars)
 			if err != nil {
