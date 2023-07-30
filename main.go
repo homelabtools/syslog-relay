@@ -35,9 +35,17 @@ func mainE() error {
 			client := logParts["client"]
 			timestamp := logParts["timestamp"]
 			content := logParts["content"]
+			tag := logParts["tag"]
 
-			fmt.Printf("%s %s %s\n", client, timestamp, content)
-			err := journal.Print(journal.PriInfo, fmt.Sprintf("%s %s %s", client, timestamp, content))
+			vars := map[string]string{
+				"UNIT": "syslog-relay",
+				"SYSLOG_IDENTIFIER": tag,
+				"SYSLOG_TIMESTAMP": timestamp
+			}
+
+			fmt.Printf(logParts)
+			// TODO: extract priority
+			err := journal.Print(journal.PriInfo, fmt.Sprintf("%s %s %s", client, timestamp, content), vars)
 			if err != nil {
 				fmt.Println(err)
 			}
